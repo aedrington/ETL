@@ -1,0 +1,633 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>.card {
+        margin: 0 auto;
+        float: none; 
+        margin-bottom: 10px;
+    }
+    .table-light {
+    border-radius: 5px;
+    width: 50%;
+    margin-left:auto;
+    margin-right:auto;
+    float: none;
+    border: solid 1px black;
+    }
+    </style>
+    <meta charset="utf-8">
+    <title>ETL Project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="https://bootswatch.com/4/lux/bootstrap.css" media="screen">
+    <link rel="stylesheet" href="https://bootswatch.com/_assets/css/custom.min.css">
+    <script>
+
+     var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-23019901-1']);
+      _gaq.push(['_setDomainName', "bootswatch.com"]);
+        _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+     (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+     })();
+
+    </script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="jumbotron text-center">
+        <h1>ETL Project</h1>
+        <h2>Team 5</h2>
+        <h3>Jobs Versus Unemployment</h3>
+        <h5>Austin Edrington, Shade Petteway, Thihn Nguyen</h5>
+     </div>
+     <header>
+      <h1 style="text-align: center">Summary</h1>
+      <p>We used a Monster.com Job Posting csv from Kaggle and pulled Unemployment and Population data via the Census API. This data was cleaned using Python, then imported into a MySQL database. We aggregated the Job data by State count, then compared to State wide unemployment data by merging the tables. We used MySQL because it is a relational database, and we were using States as a key to join the tables.</p>
+     </header> 
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-12" style="text-align: center">
+
+        <h3>Final Table</h3>
+        <p>This table compares the number of Jobs Listings per state to State Unemployment data.</p>
+      </div>
+      <table border="1" class="table-light">
+        <thead>
+          <tr style="text-align: right;">
+            <th></th>
+            <th>state</th>
+            <th>population</th>
+            <th>job_count</th>
+            <th>unemp_rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>0</th>
+            <td>AK</td>
+            <td>739795</td>
+            <td>1</td>
+            <td>7.2</td>
+          </tr>
+          <tr>
+            <th>1</th>
+            <td>AL</td>
+            <td>4874747</td>
+            <td>130</td>
+            <td>4.4</td>
+          </tr>
+          <tr>
+            <th>2</th>
+            <td>AR</td>
+            <td>3004279</td>
+            <td>73</td>
+            <td>3.7</td>
+          </tr>
+          <tr>
+            <th>3</th>
+            <td>AZ</td>
+            <td>7016270</td>
+            <td>45</td>
+            <td>4.9</td>
+          </tr>
+          <tr>
+            <th>4</th>
+            <td>CA</td>
+            <td>39536653</td>
+            <td>1605</td>
+            <td>4.8</td>
+          </tr>
+          <tr>
+            <th>5</th>
+            <td>CO</td>
+            <td>5607154</td>
+            <td>427</td>
+            <td>2.8</td>
+          </tr>
+          <tr>
+            <th>6</th>
+            <td>CT</td>
+            <td>3588184</td>
+            <td>66</td>
+            <td>4.7</td>
+          </tr>
+          <tr>
+            <th>7</th>
+            <td>DC</td>
+            <td>693972</td>
+            <td>99</td>
+            <td>6.1</td>
+          </tr>
+          <tr>
+            <th>8</th>
+            <td>DE</td>
+            <td>961939</td>
+            <td>54</td>
+            <td>4.6</td>
+          </tr>
+          <tr>
+            <th>9</th>
+            <td>FL</td>
+            <td>20984400</td>
+            <td>820</td>
+            <td>4.2</td>
+          </tr>
+          <tr>
+            <th>10</th>
+            <td>GA</td>
+            <td>10429379</td>
+            <td>714</td>
+            <td>4.7</td>
+          </tr>
+          <tr>
+            <th>11</th>
+            <td>HI</td>
+            <td>1427538</td>
+            <td>19</td>
+            <td>2.4</td>
+          </tr>
+          <tr>
+            <th>12</th>
+            <td>IA</td>
+            <td>3145711</td>
+            <td>118</td>
+            <td>3.1</td>
+          </tr>
+          <tr>
+            <th>13</th>
+            <td>ID</td>
+            <td>1716943</td>
+            <td>31</td>
+            <td>3.2</td>
+          </tr>
+          <tr>
+            <th>14</th>
+            <td>IL</td>
+            <td>12802023</td>
+            <td>838</td>
+            <td>5.0</td>
+          </tr>
+          <tr>
+            <th>15</th>
+            <td>IN</td>
+            <td>6666818</td>
+            <td>286</td>
+            <td>3.5</td>
+          </tr>
+          <tr>
+            <th>16</th>
+            <td>KS</td>
+            <td>2913123</td>
+            <td>154</td>
+            <td>3.6</td>
+          </tr>
+          <tr>
+            <th>17</th>
+            <td>KY</td>
+            <td>4454189</td>
+            <td>162</td>
+            <td>4.9</td>
+          </tr>
+          <tr>
+            <th>18</th>
+            <td>LA</td>
+            <td>4684333</td>
+            <td>225</td>
+            <td>5.1</td>
+          </tr>
+          <tr>
+            <th>19</th>
+            <td>MA</td>
+            <td>6859819</td>
+            <td>659</td>
+            <td>3.7</td>
+          </tr>
+          <tr>
+            <th>20</th>
+            <td>MD</td>
+            <td>6052177</td>
+            <td>220</td>
+            <td>4.1</td>
+          </tr>
+          <tr>
+            <th>21</th>
+            <td>ME</td>
+            <td>1335907</td>
+            <td>30</td>
+            <td>3.3</td>
+          </tr>
+          <tr>
+            <th>22</th>
+            <td>MI</td>
+            <td>9962311</td>
+            <td>216</td>
+            <td>4.6</td>
+          </tr>
+          <tr>
+            <th>23</th>
+            <td>MN</td>
+            <td>5576606</td>
+            <td>282</td>
+            <td>3.5</td>
+          </tr>
+          <tr>
+            <th>24</th>
+            <td>MO</td>
+            <td>6113532</td>
+            <td>276</td>
+            <td>3.8</td>
+          </tr>
+          <tr>
+            <th>25</th>
+            <td>MS</td>
+            <td>2984100</td>
+            <td>56</td>
+            <td>5.1</td>
+          </tr>
+          <tr>
+            <th>26</th>
+            <td>MT</td>
+            <td>1050493</td>
+            <td>24</td>
+            <td>4.0</td>
+          </tr>
+          <tr>
+            <th>27</th>
+            <td>NC</td>
+            <td>10273419</td>
+            <td>359</td>
+            <td>4.6</td>
+          </tr>
+          <tr>
+            <th>28</th>
+            <td>ND</td>
+            <td>755393</td>
+            <td>37</td>
+            <td>2.6</td>
+          </tr>
+          <tr>
+            <th>29</th>
+            <td>NE</td>
+            <td>1920076</td>
+            <td>77</td>
+            <td>2.9</td>
+          </tr>
+          <tr>
+            <th>30</th>
+            <td>NH</td>
+            <td>1342795</td>
+            <td>38</td>
+            <td>2.7</td>
+          </tr>
+          <tr>
+            <th>31</th>
+            <td>NJ</td>
+            <td>9005644</td>
+            <td>537</td>
+            <td>4.6</td>
+          </tr>
+          <tr>
+            <th>32</th>
+            <td>NM</td>
+            <td>2088070</td>
+            <td>19</td>
+            <td>6.2</td>
+          </tr>
+          <tr>
+            <th>33</th>
+            <td>NV</td>
+            <td>2998039</td>
+            <td>418</td>
+            <td>5.0</td>
+          </tr>
+          <tr>
+            <th>34</th>
+            <td>NY</td>
+            <td>19849399</td>
+            <td>638</td>
+            <td>4.7</td>
+          </tr>
+          <tr>
+            <th>35</th>
+            <td>OH</td>
+            <td>11658609</td>
+            <td>2279</td>
+            <td>5.0</td>
+          </tr>
+          <tr>
+            <th>36</th>
+            <td>OK</td>
+            <td>3930864</td>
+            <td>125</td>
+            <td>4.3</td>
+          </tr>
+          <tr>
+            <th>37</th>
+            <td>OR</td>
+            <td>4142776</td>
+            <td>41</td>
+            <td>4.1</td>
+          </tr>
+          <tr>
+            <th>38</th>
+            <td>PA</td>
+            <td>12805537</td>
+            <td>956</td>
+            <td>4.9</td>
+          </tr>
+          <tr>
+            <th>39</th>
+            <td>RI</td>
+            <td>1059639</td>
+            <td>32</td>
+            <td>4.5</td>
+          </tr>
+          <tr>
+            <th>40</th>
+            <td>SC</td>
+            <td>5024369</td>
+            <td>201</td>
+            <td>4.3</td>
+          </tr>
+          <tr>
+            <th>41</th>
+            <td>SD</td>
+            <td>869666</td>
+            <td>31</td>
+            <td>3.3</td>
+          </tr>
+          <tr>
+            <th>42</th>
+            <td>TN</td>
+            <td>6715984</td>
+            <td>562</td>
+            <td>3.7</td>
+          </tr>
+          <tr>
+            <th>43</th>
+            <td>TX</td>
+            <td>28304596</td>
+            <td>3038</td>
+            <td>4.3</td>
+          </tr>
+          <tr>
+            <th>44</th>
+            <td>UT</td>
+            <td>3101833</td>
+            <td>147</td>
+            <td>3.2</td>
+          </tr>
+          <tr>
+            <th>45</th>
+            <td>VA</td>
+            <td>8470020</td>
+            <td>293</td>
+            <td>3.8</td>
+          </tr>
+          <tr>
+            <th>46</th>
+            <td>VT</td>
+            <td>623657</td>
+            <td>13</td>
+            <td>3.0</td>
+          </tr>
+          <tr>
+            <th>47</th>
+            <td>WA</td>
+            <td>7405743</td>
+            <td>390</td>
+            <td>4.8</td>
+          </tr>
+          <tr>
+            <th>48</th>
+            <td>WI</td>
+            <td>5795483</td>
+            <td>573</td>
+            <td>3.3</td>
+          </tr>
+          <tr>
+            <th>49</th>
+            <td>WV</td>
+            <td>1815857</td>
+            <td>49</td>
+            <td>5.2</td>
+          </tr>
+          <tr>
+            <th>50</th>
+            <td>WY</td>
+            <td>579315</td>
+            <td>13</td>
+            <td>4.2</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <br>
+    <div class="row" style="text-align: center">
+        <div class="col-md-6">
+        <h3>Job Postings</h3>
+        <p>We found the CSV on Kaggle, imported it into a Dataframe, and cleaned it by dropping unnecessary columns. Since we are only interested in State data, we dropped rows with NaN as State.</p>
+        <table border="1" class="table-light">
+          <thead>
+            <tr style="text-align: center;">
+              <th></th>
+              <th>job_title</th>
+              <th>job_type</th>
+              <th>sector</th>
+              <th>City</th>
+              <th>State</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>0</th>
+              <td>IT Support Technician Job in Madison</td>
+              <td>Full Time</td>
+              <td>IT/Software Development</td>
+              <td>Madison</td>
+              <td>WI</td>
+            </tr>
+            <tr>
+              <th>1</th>
+              <td>Business Reporter/Editor Job in Madison</td>
+              <td>Full Time</td>
+              <td>Other</td>
+              <td>Madison</td>
+              <td>WI</td>
+            </tr>
+            <tr>
+              <th>2</th>
+              <td>Support Agent - GPS Systems Job in Racine</td>
+              <td>Full Time</td>
+              <td>Engineering</td>
+              <td>Racine</td>
+              <td>WI</td>
+            </tr>
+            <tr>
+              <th>3</th>
+              <td>Machine Operator Job in Portage</td>
+              <td>Full Time</td>
+              <td>Engineering</td>
+              <td>Portage</td>
+              <td>WI</td>
+            </tr>
+            <tr>
+              <th>4</th>
+              <td>C Indirect Fire Infantryman Job in Madison</td>
+              <td>Full Time</td>
+              <td>Entry Level</td>
+              <td>Madison</td>
+              <td>WI</td>
+            </tr>
+          </tbody>
+         </table>
+      </div>
+        <div class="col-md-6">
+        <h3>Unemployment Data</h3>
+        <p>We scrapped this data from the Bureau of Labor Statistics using the Panda function .read_html</p>
+        <table border="1" class="table-light">
+          <thead>
+            <tr style="text-align: center;">
+              <th></th>
+              <th>state</th>
+              <th>2017 rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>0</th>
+              <td>Hawaii</td>
+              <td>2.4</td>
+            </tr>
+            <tr>
+              <th>1</th>
+              <td>North Dakota</td>
+              <td>2.6</td>
+            </tr>
+            <tr>
+              <th>2</th>
+              <td>New Hampshire</td>
+              <td>2.7</td>
+            </tr>
+            <tr>
+              <th>3</th>
+              <td>Colorado</td>
+              <td>2.8</td>
+            </tr>
+            <tr>
+              <th>4</th>
+              <td>Nebraska</td>
+              <td>2.9</td>
+            </tr>
+          </tbody>
+         </table>  
+      </div>
+      </div>
+      <br>
+      <div class="row" style="text-align: center">
+          <div class="col-md-6">
+          <h3>State Population</h3>
+          <p>We pulled this information from the Census API.</p>
+          <table border="1" class="table-light">
+            <thead>
+              <tr style="text-align: center;">
+                <th></th>
+                <th>population</th>
+                <th>state</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>0</th>
+                <td>4874747</td>
+                <td>Alabama</td>
+              </tr>
+              <tr>
+                <th>1</th>
+                <td>739795</td>
+                <td>Alaska</td>
+              </tr>
+              <tr>
+                <th>2</th>
+                <td>7016270</td>
+                <td>Arizona</td>
+              </tr>
+              <tr>
+                <th>3</th>
+                <td>3004279</td>
+                <td>Arkansas</td>
+              </tr>
+              <tr>
+                <th>4</th>
+                <td>39536653</td>
+                <td>California</td>
+              </tr>
+            </tbody>
+           </table>
+          </div>
+          <div class="col-md-6">
+            <h3>State Abbreviation Key Table</h3>
+            <p>We found this key online to help tie state names to state abbrevations.</p>
+            <table border="1" class="table-light">
+              <thead>
+                <tr style="text-align: center;">
+                  <th></th>
+                  <th>State</th>
+                  <th>Abbreviation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>0</th>
+                  <td>Alabama</td>
+                  <td>AL</td>
+                </tr>
+                <tr>
+                  <th>1</th>
+                  <td>Alaska</td>
+                  <td>AK</td>
+                </tr>
+                <tr>
+                  <th>2</th>
+                  <td>Arizona</td>
+                  <td>AZ</td>
+                </tr>
+                <tr>
+                  <th>3</th>
+                  <td>Arkansas</td>
+                  <td>AR</td>
+                </tr>
+                <tr>
+                  <th>4</th>
+                  <td>California</td>
+                  <td>CA</td>
+                </tr>
+              </tbody>
+             </table>
+          </div>
+        </div>
+    <br>
+    <div class="card" style="width: 18rem; text-align: center">
+      <div class="card-body">
+        <h5 class="card-title">Sources</h5>
+        <p class="card-text">These are the main two links we used for our data.</p>
+        <ul>
+        <li><a href="https://www.kaggle.com/PromptCloudHQ/us-jobs-on-monstercom" class="card-link">Kaggle</a></li>
+        <li><a style="text-align: center" href="https://www.bls.gov/lau/lastrk17.htm" class="card-link">Bureau of Labor Statistics</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="../_vendor/jquery/dist/jquery.min.js"></script>
+    <script src="../_vendor/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../_vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../_assets/js/custom.js"></script>
+  </body>
+</html>
